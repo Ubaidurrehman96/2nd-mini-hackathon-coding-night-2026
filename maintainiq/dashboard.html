@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard — MaintainIQ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span>MaintainIQ</div>
+    <nav>
+      <a href="dashboard.html" class="active">Assets</a>
+      <a href="issues.html">Issues</a>
+    </nav>
+    <div class="user-chip">
+      <span id="userName">Loading...</span>
+      <button class="link-btn" onclick="logout()">Sign out</button>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="page-header">
+      <div>
+        <h1>Assets</h1>
+        <p>Every physical asset, its status, and its QR-accessible public page.</p>
+      </div>
+      <button class="btn btn-amber" onclick="openAssetModal()">+ Register asset</button>
+    </div>
+
+    <!-- Summary cards -->
+    <div class="grid-3" style="margin-bottom:22px;">
+      <div class="summary-card"><div class="num" id="statTotal">0</div><div class="label">Total assets</div></div>
+      <div class="summary-card"><div class="num" id="statIssues">0</div><div class="label">Assets with open issues</div></div>
+      <div class="summary-card"><div class="num" id="statOOS">0</div><div class="label">Out of service</div></div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <input type="text" id="searchInput" placeholder="Search by name or asset code..." oninput="renderAssets()">
+      <select id="statusFilter" onchange="renderAssets()">
+        <option value="">All statuses</option>
+        <option>Operational</option>
+        <option>Issue Reported</option>
+        <option>Under Inspection</option>
+        <option>Under Maintenance</option>
+        <option>Out of Service</option>
+        <option>Retired</option>
+      </select>
+      <select id="categoryFilter" onchange="renderAssets()">
+        <option value="">All categories</option>
+      </select>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Asset</th><th>Code</th><th>Category</th><th>Location</th><th>Status</th><th>Next service</th>
+        </tr>
+      </thead>
+      <tbody id="assetsTableBody">
+        <tr class="empty-row"><td colspan="6">Loading assets...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ADD ASSET MODAL -->
+  <div id="assetModalBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:100; align-items:center; justify-content:center; padding:20px;">
+    <div class="card" style="max-width:520px; width:100%; max-height:90vh; overflow-y:auto;">
+      <h3>Register new asset</h3>
+      <form id="assetForm">
+        <label>Asset name</label>
+        <input type="text" id="fName" required placeholder="Classroom Projector 01">
+
+        <div class="field-row">
+          <div>
+            <label>Category</label>
+            <input type="text" id="fCategory" required placeholder="Electronics / HVAC / Furniture">
+          </div>
+          <div>
+            <label>Location</label>
+            <input type="text" id="fLocation" required placeholder="Block A - Room 12">
+          </div>
+        </div>
+
+        <div class="field-row">
+          <div>
+            <label>Condition</label>
+            <select id="fCondition">
+              <option>Good</option><option>Fair</option><option>Poor</option>
+            </select>
+          </div>
+          <div>
+            <label>Status</label>
+            <select id="fStatus">
+              <option>Operational</option><option>Under Inspection</option><option>Under Maintenance</option><option>Out of Service</option>
+            </select>
+          </div>
+        </div>
+
+        <label>Description (optional)</label>
+        <textarea id="fDescription" placeholder="Model, serial number, notes..."></textarea>
+
+        <div class="field-row">
+          <div>
+            <label>Last service date</label>
+            <input type="date" id="fLastService">
+          </div>
+          <div>
+            <label>Next service date</label>
+            <input type="date" id="fNextService">
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:20px;">
+          <button type="button" class="btn btn-outline" onclick="closeAssetModal()" style="flex:1;">Cancel</button>
+          <button type="submit" class="btn btn-amber" id="saveAssetBtn" style="flex:1;">Save asset</button>
+        </div>
+        <p class="error-text" id="assetFormError"></p>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

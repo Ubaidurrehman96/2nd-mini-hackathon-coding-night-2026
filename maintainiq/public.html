@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Asset — MaintainIQ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="public-wrap" id="notFoundState" style="display:none;">
+    <div class="empty-state">
+      <h3>Asset not found</h3>
+      <p>This QR code or link doesn't match any asset in our system. Please check with the facility team.</p>
+    </div>
+  </div>
+
+  <div class="public-wrap" id="mainState" style="display:none;">
+    <div class="public-header">
+      <span class="asset-tag" id="pCode">-</span>
+      <h1 id="pName">-</h1>
+      <div class="info-grid">
+        <div><div class="k">Category</div><div class="v" id="pCategory">-</div></div>
+        <div><div class="k">Location</div><div class="v" id="pLocation">-</div></div>
+        <div><div class="k">Status</div><div class="v" id="pStatus">-</div></div>
+        <div><div class="k">Condition</div><div class="v" id="pCondition">-</div></div>
+        <div><div class="k">Last service</div><div class="v" id="pLastService">-</div></div>
+        <div><div class="k">Next service</div><div class="v" id="pNextService">-</div></div>
+      </div>
+    </div>
+
+    <div id="retiredNotice" style="display:none;" class="card" style="margin-bottom:16px;">
+      <p style="color:var(--red); margin:0;">This asset has been retired and is no longer in active service.</p>
+    </div>
+
+    <div class="card">
+      <h3>Report an issue</h3>
+      <p>Tell us what's wrong. Our team reviews every report and assigns a technician.</p>
+      <form id="reportForm">
+        <label>Describe the problem</label>
+        <textarea id="rDescription" required placeholder="e.g. The projector display is flickering and sometimes does not detect HDMI."></textarea>
+
+        <div style="display:flex; justify-content:flex-end;">
+          <button type="button" class="btn btn-outline btn-sm" id="aiTriageBtn" onclick="runAiTriage()">✨ Suggest details with AI</button>
+        </div>
+
+        <div id="aiSuggestionBox" style="display:none; background:var(--amber-soft); border-radius:8px; padding:12px 14px; margin-top:10px;">
+          <p class="muted" style="margin-bottom:8px;">AI suggestion — review and edit before submitting:</p>
+          <div class="field-row">
+            <div><label style="margin-top:0;">Suggested title</label><input type="text" id="aiTitle"></div>
+            <div><label style="margin-top:0;">Category</label><input type="text" id="aiCategory"></div>
+          </div>
+          <label>Priority</label>
+          <select id="aiPriority"><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select>
+          <label>Possible causes</label>
+          <textarea id="aiCauses" rows="2"></textarea>
+          <label>Suggested initial checks</label>
+          <textarea id="aiChecks" rows="2"></textarea>
+        </div>
+
+        <div class="field-row">
+          <div>
+            <label>Your name (optional)</label>
+            <input type="text" id="rName" placeholder="Anonymous">
+          </div>
+          <div>
+            <label>Contact (optional)</label>
+            <input type="text" id="rContact" placeholder="Email or phone">
+          </div>
+        </div>
+
+        <label>Photo evidence (optional)</label>
+        <input type="file" id="rEvidence" accept="image/*">
+
+        <button type="submit" class="btn btn-amber btn-block" id="submitReportBtn">Submit report</button>
+        <p class="error-text" id="reportError"></p>
+      </form>
+    </div>
+
+    <div id="successState" style="display:none;" class="card" style="margin-top:16px; text-align:center;">
+      <h3 style="color:var(--green);">Report submitted</h3>
+      <p>Your issue number is <span class="asset-tag" id="successIssueNumber"></span>. Keep it to check status with the facility team.</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/ai-triage.js"></script>
+  <script src="js/public.js"></script>
+</body>
+</html>

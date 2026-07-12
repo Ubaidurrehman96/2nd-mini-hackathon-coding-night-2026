@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Issues — MaintainIQ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span>MaintainIQ</div>
+    <nav>
+      <a href="dashboard.html">Assets</a>
+      <a href="issues.html" class="active">Issues</a>
+    </nav>
+    <div class="user-chip">
+      <span id="userName"></span>
+      <button class="link-btn" onclick="logout()">Sign out</button>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="page-header">
+      <div>
+        <h1>Issues</h1>
+        <p>Every reported issue across all assets, oldest problems surfaced first.</p>
+      </div>
+    </div>
+
+    <div class="grid-3" style="margin-bottom:22px;">
+      <div class="summary-card"><div class="num" id="statOpen">0</div><div class="label">Open issues</div></div>
+      <div class="summary-card"><div class="num" id="statCritical">0</div><div class="label">Critical priority</div></div>
+      <div class="summary-card"><div class="num" id="statUnassigned">0</div><div class="label">Unassigned</div></div>
+    </div>
+
+    <div class="toolbar">
+      <input type="text" id="searchInput" placeholder="Search by title or issue #..." oninput="renderIssues()">
+      <select id="statusFilter" onchange="renderIssues()">
+        <option value="">All statuses</option>
+        <option>Reported</option><option>Assigned</option><option>Inspection Started</option>
+        <option>Maintenance In Progress</option><option>Waiting for Parts</option>
+        <option>Resolved</option><option>Closed</option><option>Reopened</option>
+      </select>
+      <select id="priorityFilter" onchange="renderIssues()">
+        <option value="">All priorities</option>
+        <option>Low</option><option>Medium</option><option>High</option><option>Critical</option>
+      </select>
+    </div>
+
+    <table>
+      <thead><tr><th>Issue #</th><th>Title</th><th>Asset</th><th>Priority</th><th>Status</th><th>Reported</th></tr></thead>
+      <tbody id="issuesTableBody"><tr class="empty-row"><td colspan="6">Loading...</td></tr></tbody>
+    </table>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/issues-list.js"></script>
+</body>
+</html>

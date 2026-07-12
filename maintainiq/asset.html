@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Asset Details — MaintainIQ</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="brand"><span class="dot"></span>MaintainIQ</div>
+    <nav>
+      <a href="dashboard.html">Assets</a>
+      <a href="issues.html">Issues</a>
+    </nav>
+    <div class="user-chip">
+      <span id="userName"></span>
+      <button class="link-btn" onclick="logout()">Sign out</button>
+    </div>
+  </div>
+
+  <div class="page">
+    <a href="dashboard.html" class="muted">&larr; Back to assets</a>
+
+    <div class="page-header" style="margin-top:10px;">
+      <div>
+        <div class="tag-list" style="margin-bottom:8px;">
+          <span class="asset-tag" id="assetCode">-</span>
+          <span class="badge" id="assetStatusBadge"><span class="led"></span>-</span>
+        </div>
+        <h1 id="assetName">Loading...</h1>
+        <p id="assetMeta"></p>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-outline btn-sm" onclick="openEditModal()">Edit asset</button>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <!-- LEFT: details -->
+      <div>
+        <div class="card">
+          <h3>Asset information</h3>
+          <div class="info-grid" style="color:var(--text);">
+            <div><span class="muted" style="font-size:0.78rem;">CATEGORY</span><div id="dCategory">-</div></div>
+            <div><span class="muted" style="font-size:0.78rem;">LOCATION</span><div id="dLocation">-</div></div>
+            <div><span class="muted" style="font-size:0.78rem;">CONDITION</span><div id="dCondition">-</div></div>
+            <div><span class="muted" style="font-size:0.78rem;">ASSIGNED TECHNICIAN</span><div id="dTechnician">Unassigned</div></div>
+            <div><span class="muted" style="font-size:0.78rem;">LAST SERVICE</span><div id="dLastService">-</div></div>
+            <div><span class="muted" style="font-size:0.78rem;">NEXT SERVICE</span><div id="dNextService">-</div></div>
+          </div>
+          <div id="dDescriptionWrap" style="margin-top:14px;">
+            <span class="muted" style="font-size:0.78rem;">DESCRIPTION</span>
+            <p id="dDescription" style="color:var(--text); margin-top:4px;">-</p>
+          </div>
+          <label style="margin-top:4px;">Reassign technician</label>
+          <select id="technicianSelect" onchange="assignTechnician()">
+            <option value="">Unassigned</option>
+          </select>
+        </div>
+
+        <div class="section-title">
+          <span>Issues reported for this asset</span>
+        </div>
+        <table>
+          <thead><tr><th>Issue #</th><th>Title</th><th>Priority</th><th>Status</th><th>Reported</th></tr></thead>
+          <tbody id="issuesTableBody"><tr class="empty-row"><td colspan="5">Loading...</td></tr></tbody>
+        </table>
+
+        <div class="section-title"><span>Asset history</span></div>
+        <div class="card">
+          <ul class="timeline" id="historyTimeline">
+            <li><div class="t-action">Loading history...</div></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- RIGHT: QR -->
+      <div>
+        <div class="card qr-panel">
+          <h3>QR code & public page</h3>
+          <p class="muted">Scanning this code opens the safe public page for this asset — no login required.</p>
+          <div id="qrcode"></div>
+          <div class="qr-actions">
+            <button class="btn btn-outline btn-sm" onclick="downloadQR()">Download QR</button>
+            <button class="btn btn-outline btn-sm" onclick="copyPublicLink()">Copy link</button>
+            <a class="btn btn-amber btn-sm" id="openPublicBtn" target="_blank">Open public page</a>
+          </div>
+          <div class="public-link-box">
+            <input type="text" id="publicLinkInput" readonly>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT ASSET MODAL -->
+  <div id="editModalBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:100; align-items:center; justify-content:center; padding:20px;">
+    <div class="card" style="max-width:520px; width:100%; max-height:90vh; overflow-y:auto;">
+      <h3>Edit asset</h3>
+      <form id="editForm">
+        <label>Asset name</label>
+        <input type="text" id="eName" required>
+        <div class="field-row">
+          <div><label>Category</label><input type="text" id="eCategory" required></div>
+          <div><label>Location</label><input type="text" id="eLocation" required></div>
+        </div>
+        <div class="field-row">
+          <div>
+            <label>Condition</label>
+            <select id="eCondition"><option>Good</option><option>Fair</option><option>Poor</option></select>
+          </div>
+          <div>
+            <label>Status</label>
+            <select id="eStatus">
+              <option>Operational</option><option>Issue Reported</option><option>Under Inspection</option>
+              <option>Under Maintenance</option><option>Out of Service</option><option>Retired</option>
+            </select>
+          </div>
+        </div>
+        <label>Description</label>
+        <textarea id="eDescription"></textarea>
+        <div class="field-row">
+          <div><label>Last service date</label><input type="date" id="eLastService"></div>
+          <div><label>Next service date</label><input type="date" id="eNextService"></div>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:20px;">
+          <button type="button" class="btn btn-outline" onclick="closeEditModal()" style="flex:1;">Cancel</button>
+          <button type="submit" class="btn btn-amber" id="saveEditBtn" style="flex:1;">Save changes</button>
+        </div>
+        <p class="error-text" id="editFormError"></p>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/asset.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script> 
+
+</body>
+</html>

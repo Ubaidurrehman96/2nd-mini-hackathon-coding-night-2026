@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MaintainIQ — Sign in</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <h2><span class="dot"></span>MaintainIQ</h2>
+      <p style="margin-bottom:20px;">AI-powered QR maintenance & asset history platform.</p>
+
+      <div class="auth-tabs">
+        <button id="tabLogin" class="active" onclick="switchTab('login')">Sign in</button>
+        <button id="tabSignup" onclick="switchTab('signup')">Create account</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form id="loginForm">
+        <label for="loginEmail">Email</label>
+        <input type="email" id="loginEmail" required placeholder="you@company.com">
+
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" required placeholder="••••••••">
+
+        <button type="submit" class="btn btn-amber btn-block" id="loginBtn">Sign in</button>
+        <p class="error-text" id="loginError"></p>
+      </form>
+
+      <!-- SIGNUP FORM -->
+      <form id="signupForm" style="display:none;">
+        <label for="signupName">Full name</label>
+        <input type="text" id="signupName" required placeholder="Ali Khan">
+
+        <label for="signupEmail">Email</label>
+        <input type="email" id="signupEmail" required placeholder="you@company.com">
+
+        <label for="signupPassword">Password</label>
+        <input type="password" id="signupPassword" required minlength="6" placeholder="At least 6 characters">
+
+        <label for="signupRole">Role</label>
+        <select id="signupRole">
+          <option value="admin">Administrator</option>
+          <option value="technician">Technician</option>
+        </select>
+
+        <button type="submit" class="btn btn-amber btn-block" id="signupBtn">Create account</button>
+        <p class="error-text" id="signupError"></p>
+        <p class="success-text" id="signupSuccess"></p>
+      </form>
+
+      <p class="hint" style="margin-top:18px;">Reporting an issue as a visitor? Ask an admin for the asset's QR code — no login needed for that.</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>
